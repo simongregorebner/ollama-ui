@@ -2,6 +2,7 @@ import './assets/main.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import { VueQueryPlugin } from '@tanstack/vue-query'
 
 import PrimeVue from 'primevue/config'
 import Button from 'primevue/button'
@@ -36,6 +37,7 @@ app.use(PrimeVue, {
 })
 app.use(createPinia())
 app.use(router)
+app.use(VueQueryPlugin)
 
 app.component('Button', Button)
 app.component('Textarea', Textarea)
