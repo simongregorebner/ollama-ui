@@ -17,41 +17,59 @@ const { currentModel } = toRefs(modelStore);
 //     chatInput.value = ''
 // }
 
-import ollama from 'ollama';
+import ollama, { type Message } from 'ollama';
 import type { RefSymbol } from '@vue/reactivity';
 import { Textarea } from 'primevue';
 
 // const messages = ref([{ role: 'agent', content: 'Lets start ...' }]);
 const messages = ref([{ role: 'agent', content: '...' }]);
+// const messages = ref();
 messages.value.pop(); // remove the first message again so that is does not show up
 const currentOutputMessageContent = ref('');
 
 // const chatInput = ref('Why is the sky blue?')
-const chatInput = ref()
+const chatInput = ref('')
 const chatInputBoxRef = useTemplateRef('chatInputBoxRef')
 
-// const submitChat = async () => {
-//     const content = chatInput.value;
-//     chatInput.value = '';
-//     const response = await ollama.chat({
-//         model: 'llama3.2',
-//         messages: [{ role: 'user', content }],
-//     });
-//     console.log(response.message.content);
-// }
-
 const submitChat = async () => {
+    // console.log(imageFile.replace(new RegExp('data:.*/.*;base64,'), ''));
+
     const content = chatInput.value;
     chatInput.value = '';
-    const inputMessage = { role: 'user', content };
+    // const inputMessage = { role: 'user', content };
+    let inputMessage: Message;
+    if (imageFile != '') {
+        inputMessage = { role: 'user', content: content, images: [imageFile.replace(new RegExp('data:.*/.*;base64,'), '')] };
+    }
+    else {
+        inputMessage = { role: 'user', content: content };
+    }
+    imageFile = ''
+
     messages.value.push(inputMessage);
-    // const response = await ollama.chat({ model: 'llama3.2', messages: [inputMessage], stream: true });
+
     const response = await ollama.chat({ model: currentModel.value, messages: [inputMessage], stream: true });
     for await (const part of response) {
         currentOutputMessageContent.value += part.message.content;
     }
     messages.value.push({ role: 'agent', content: currentOutputMessageContent.value });
     currentOutputMessageContent.value = '';
+};
+
+// const chooseCallback = () => {
+//     console.log('file upload');
+// }
+
+// const imageFile = ref();
+let imageFile: string = '';
+
+const uploadFile = (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (e) => (imageFile = e.target.result);
+    reader.readAsDataURL(file);
+    // const file = event.target.files[0];
+    // console.log("have file" + file.name)
 };
 
 const focusInput = () => {
@@ -97,9 +115,27 @@ const focusInput = () => {
             <button @click="submitChat" id="submitButton">Submit</button>
         </div> -->
         <div id="inputArea">
-            <Textarea v-model="chatInput" @keyup.enter="submitChat" placeholder="Enter your prompt here ..."
-                id="chatInputBox" ref="chatInputBoxRef" />
-            <Button @click="submitChat" id="submitButton"> <i class="pi pi-send" style="font-size: 1rem"></i></Button>
+            <div id="inputTextArea">
+                <Textarea v-model="chatInput" @keyup.enter="submitChat" placeholder="Enter your prompt here ..."
+                    id="chatInputBox" ref="chatInputBoxRef" />
+            </div>
+            <div id="inputButtonArea">
+                <!-- <Button @click="submitChat" icon="pi pi-send" rounded outlined severity="secondary"></Button> -->
+                <label>
+                    <button @click="submitChat" style="display: none" />
+                    <i class="pi pi-send" title="load file"></i>
+                </label>
+
+                <label>
+                    <input type="file" @change="uploadFile" style="display: none" />
+                    <i class="pi pi-images" title="load file"></i>
+                </label>
+
+
+
+                <!-- <FileUpload mode="basic" @select="onFileSelect" icon="pi pi-images" customUpload auto
+                    severity="secondary" class="p-button-outlined" /> -->
+            </div>
         </div>
 
     </div>
@@ -109,6 +145,10 @@ const focusInput = () => {
 /* .logo {
     align-self: center;
 } */
+
+label {
+    padding: 10px;
+}
 
 .logolama {
     width: 100%;
@@ -141,17 +181,34 @@ const focusInput = () => {
     padding: 10px;
 }
 
+#inputTextArea {
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#inputButtonArea {
+    padding-bottom: 10px;
+    padding-left: 10px;
+}
+
 #inputArea {
     display: flex;
-    height: 100px;
+    flex-direction: column;
     width: 100%;
-    padding: 10px;
-    align-items: space-between;
+    margin-left: 10px;
+    margin-right: 10px;
+    background-color: var(--custom-2);
+    border-radius: 0.5rem;
+    border-width: 0;
+    /* align-items: space-between; */
 }
 
 #chatInputBox {
     width: 100%;
-    height: 100%;
-    padding: 10px;
+    height: 60px;
+    /* padding: 10px; */
+    background-color: var(--custom-2);
+    border-width: 0;
 }
 </style>
