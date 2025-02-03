@@ -58,7 +58,7 @@ const pullModel = (name: string) => {
 <template>
     <div id="modelSelectorContainer">
         <div id="modelSelector" class="flex flex-column h-10rem">
-            <span class="text-lg font-bold">Model</span>
+            <!-- <span class="text-lg font-bold">Model</span> -->
             <div v-if="isPending">
                 <Dropdown placeholder="Loading Models..." loading class="w-full md:w-14rem"></Dropdown>
             </div>
@@ -86,6 +86,6 @@ const pullModel = (name: string) => {
 
 #modelSelector {
     width: 100%;
-    margin: 1rem;
+    /* margin: 1rem; */
 }
 </style>
