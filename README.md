@@ -1,45 +1,36 @@
-# ollama-ui
+# Overview
 
-This template should help get you started developing with Vue 3 in Vite.
+This is basic, all in one, chat ui for ollama. For simplicity it is bundled with a go server and packaged into a all-in-one binary.
+Simply build/download the binary and start chatting ...
 
-## Recommended IDE Setup
+# Usage
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+1. Start ollama
+2. Start ollama-ui binary
 
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
+# Development
 
 ```sh
+# install dependencies
 npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
+# run development web server
 npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
+# build project
 npm run build
-```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
+# run tests
 npm run test:unit
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
+# lint project
 npm run lint
 ```
+
+To build the all in one go server binary do:
+
+```sh
+go generate
+go build
+```
+
+The restulting binary is a all in one bundle (i.e. webserver + website). All you need to do is to start the binary and point your browser to http://localhost:3000
+
+(the only other prerequisite is that ollama is running on your machine as well)
