@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import type { Message } from 'ollama';
+import type { Message } from 'ollama/browser';
 import { computed } from 'vue';
-import MarkdownRenderer from "./MarkdownRenderer.vue";
 
 interface Props {
     message: Message;

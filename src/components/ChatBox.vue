@@ -17,8 +17,7 @@ const { currentModel } = toRefs(modelStore);
 //     chatInput.value = ''
 // }
 
-import ollama, { type Message } from 'ollama';
-import type { RefSymbol } from '@vue/reactivity';
+import ollama, { type Message } from 'ollama/browser';
 import { Textarea } from 'primevue';
 
 // const messages = ref([{ role: 'agent', content: 'Lets start ...' }]);

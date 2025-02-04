@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, toRefs } from 'vue';
-import ollama, { type ListResponse } from 'ollama';
+import ollama from 'ollama/browser';
 import { useQuery, useQueryClient, useMutation } from '@tanstack/vue-query';
 import { useModelStore } from '@/stores/model';
 import PullModelDialog from './PullModelDialog.vue';
