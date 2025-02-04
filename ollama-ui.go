@@ -2,7 +2,6 @@ package main
 
 import (
 	"embed"
-	"fmt"
 	"io/fs"
 	"net/http"
 
@@ -36,5 +35,4 @@ func main() {
 
 
 	http.ListenAndServe(":3000", r)
-	fmt.Print("Listening on port http://localhost:3000")
 }
