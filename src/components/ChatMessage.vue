@@ -9,11 +9,11 @@ interface Props {
 const props = defineProps<Props>();
 
 const messageClass = computed(() => {
-    return props.message.role === 'user' ? 'message userMessage' : 'message agentMessage';
+    return props.message.role === 'user' ? 'message userMessage' : 'message assistantMessage';
 });
 
 const messageContentClass = computed(() => {
-    return props.message.role === 'user' ? 'messageContent userMessageContent' : 'messageContent agentMessageContent';
+    return props.message.role === 'user' ? 'messageContent userMessageContent' : 'messageContent assistantMessageContent';
 });
 
 </script>
@@ -40,7 +40,7 @@ const messageContentClass = computed(() => {
     padding-left: 10%;
 }
 
-.agentMessage {
+.assistantMessage {
     justify-content: flex-start;
     padding-right: 10%;
 }
@@ -60,7 +60,7 @@ const messageContentClass = computed(() => {
     border-bottom-left-radius: 0.5rem;
 }
 
-.agentMessageContent {
+.assistantMessageContent {
     border-bottom-right-radius: 0.5rem;
     border-bottom-left-radius: 0;
 }

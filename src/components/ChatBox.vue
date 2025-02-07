@@ -19,15 +19,15 @@ const { currentModel } = toRefs(modelStore);
 
 import { Textarea } from 'primevue';
 
-// import ollama , {type Message } from 'ollama/browser';
+// import ollama, { type Message } from 'ollama/browser';
 // Use proxy instead of direct ollama communication
 import { Ollama, type Message } from 'ollama/browser';
 const ollama = new Ollama({
     host: window.location.origin + '/ollama/', // Replace with your actual URL
 });
 
-// const messages = ref([{ role: 'agent', content: 'Lets start ...' }]);
-const messages = ref([{ role: 'agent', content: '...' }]);
+// const messages = ref([{ role: 'assistant', content: 'Lets start ...' }]);
+const messages = ref([{ role: 'assistant', content: '...' }]);
 // const messages = ref();
 messages.value.pop(); // remove the first message again so that is does not show up
 const currentOutputMessageContent = ref('');
@@ -57,7 +57,7 @@ const submitChat = async () => {
     for await (const part of response) {
         currentOutputMessageContent.value += part.message.content;
     }
-    messages.value.push({ role: 'agent', content: currentOutputMessageContent.value });
+    messages.value.push({ role: 'assistant', content: currentOutputMessageContent.value });
     currentOutputMessageContent.value = '';
 };
 
@@ -116,7 +116,7 @@ const focusInput = () => {
                     <ChatMessage :message="message" />
                 </div>
                 <div v-if="currentOutputMessageContent">
-                    <ChatMessage :message="{ role: 'agent', content: currentOutputMessageContent }" />
+                    <ChatMessage :message="{ role: 'assistant', content: currentOutputMessageContent }" />
                 </div>
             </div>
         </div>

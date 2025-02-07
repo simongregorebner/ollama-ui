@@ -37,7 +37,6 @@ The resulting binary is a all-in-one bundle (i.e. webserver + website). All you 
 
 # TODO
 
-- replace agent with assistant
 - ability to send system messages (pre set system messages for different tasks?)
 
   - e.g. a selector at the imput field
