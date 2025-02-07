@@ -17,8 +17,14 @@ const { currentModel } = toRefs(modelStore);
 //     chatInput.value = ''
 // }
 
-import ollama, { type Message } from 'ollama/browser';
 import { Textarea } from 'primevue';
+
+// import ollama , {type Message } from 'ollama/browser';
+// Use proxy instead of direct ollama communication
+import { Ollama, type Message } from 'ollama/browser';
+const ollama = new Ollama({
+    host: window.location.origin + '/ollama/', // Replace with your actual URL
+});
 
 // const messages = ref([{ role: 'agent', content: 'Lets start ...' }]);
 const messages = ref([{ role: 'agent', content: '...' }]);
@@ -62,11 +68,16 @@ const submitChat = async () => {
 // const imageFile = ref();
 let imageFile: string = '';
 
-const uploadFile = (event) => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.onload = (e) => (imageFile = e.target.result);
-    reader.readAsDataURL(file);
+const uploadFile = (event: Event) => {
+    const target = event.target as HTMLInputElement
+    if (target && target.files) {
+        const file = target.files[0];
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            if (e.target && e.target.result) { imageFile = e.target.result.toString() }
+        };
+        reader.readAsDataURL(file);
+    }
     // const file = event.target.files[0];
     // console.log("have file" + file.name)
 };

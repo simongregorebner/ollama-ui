@@ -1,12 +1,19 @@
 <script setup lang="ts">
 import { computed, ref, toRefs } from 'vue';
-import ollama from 'ollama/browser';
+
 import { useQuery, useQueryClient, useMutation } from '@tanstack/vue-query';
 import { useModelStore } from '@/stores/model';
 import PullModelDialog from './PullModelDialog.vue';
 
 const modelStore = useModelStore();
 const { currentModel } = toRefs(modelStore);
+
+// import ollama from 'ollama/browser';
+// Use proxy instead of direct ollama communication
+import { Ollama } from 'ollama/browser';
+const ollama = new Ollama({
+    host: window.location.origin + '/ollama/', // Replace with your actual URL
+});
 
 const getModels = async () => {
     const response = await ollama.list();
