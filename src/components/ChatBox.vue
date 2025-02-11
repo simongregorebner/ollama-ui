@@ -1,21 +1,10 @@
 <script setup lang="ts">
 import ChatMessage from '../components/ChatMessage.vue'
 import { useModelStore } from '@/stores/model';
-
 import { ref, toRefs, useTemplateRef } from 'vue'
-
-
 
 const modelStore = useModelStore();
 const { currentModel } = toRefs(modelStore);
-// const { currentModel } = ref(modelStore);
-
-// const chatInput = ref('Why is the sky blue?')
-
-// const submitChat = () => {
-//     console.log('submitting chat', chatInput.value)
-//     chatInput.value = ''
-// }
 
 import { Textarea } from 'primevue';
 
@@ -27,7 +16,8 @@ const ollama = new Ollama({
 });
 
 // const messages = ref([{ role: 'assistant', content: 'Lets start ...' }]);
-const messages = ref([{ role: 'assistant', content: '...' }]);
+// const messages = ref([{ role: 'assistant', content: '...' }]);
+const messages = ref(<Message[]>[]);
 // const messages = ref();
 messages.value.pop(); // remove the first message again so that is does not show up
 const currentOutputMessageContent = ref('');
@@ -83,6 +73,11 @@ const uploadFile = (event: Event) => {
     // console.log("have file" + file.name)
 };
 
+const clearChat = (event: Event) => {
+    // messages.value.pop()
+    messages.value = <Message[]>[]
+}
+
 const focusInput = () => {
     // if (chatInputBoxRef.value) { // Check if the ref is set
     //     console.log(chatInputBoxRef.value)
@@ -132,16 +127,22 @@ const focusInput = () => {
             </div>
             <div id="inputButtonArea">
                 <!-- <Button @click="submitChat" icon="pi pi-send" rounded outlined severity="secondary"></Button> -->
-                <label>
-                    <button @click="submitChat" style="display: none" />
-                    <i class="pi pi-send" title="load file"></i>
-                </label>
-
-                <label>
-                    <input type="file" @change="uploadFile" style="display: none" />
-                    <i class="pi pi-images" title="load file"></i>
-                </label>
-
+                <div>
+                    <label>
+                        <input type="file" @change="uploadFile" style="display: none" />
+                        <i class="pi pi-images" title="Load File"></i>
+                    </label>
+                    <label>
+                        <button @click="submitChat" style="display: none" />
+                        <i class="pi pi-send" title="Submit Message"></i>
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        <button @click="clearChat" style="display: none;" />
+                        <i class="pi pi-times" title="Clear Chat" style="color: var(--custom-red)"></i>
+                    </label>
+                </div>
 
 
                 <!-- <FileUpload mode="basic" @select="onFileSelect" icon="pi pi-images" customUpload auto
@@ -199,8 +200,11 @@ label {
 }
 
 #inputButtonArea {
+    display: flex;
+    justify-content: space-between;
     padding-bottom: 10px;
     padding-left: 10px;
+    padding-right: 10px;
 }
 
 #inputArea {
