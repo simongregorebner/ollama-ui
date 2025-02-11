@@ -2,6 +2,10 @@
 import type { Message } from 'ollama/browser';
 import { computed } from 'vue';
 
+// import MarkdownIt from 'markdown-it';
+// const markdown = new MarkdownIt();
+
+
 interface Props {
     message: Message;
 }
@@ -20,9 +24,9 @@ const messageContentClass = computed(() => {
 
 <template>
     <div :class="messageClass">
-        <div :class="messageContentClass">
-            {{ props.message.content }}
-            <!-- <MarkdownRenderer :source="props.message.content"></MarkdownRenderer> -->
+        <!-- <div :class="messageContentClass" v-html="markdown.render(props.message.content)">
+        </div> -->
+        <div :class="messageContentClass" v-html="props.message.content.replace(/\n/g, '<br/>')">
         </div>
     </div>
 </template>

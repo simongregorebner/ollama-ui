@@ -15,16 +15,24 @@ const ollama = new Ollama({
     host: window.location.origin + '/ollama/', // Replace with your actual URL
 });
 
-// const messages = ref([{ role: 'assistant', content: 'Lets start ...' }]);
-// const messages = ref([{ role: 'assistant', content: '...' }]);
 const messages = ref(<Message[]>[]);
-// const messages = ref();
-messages.value.pop(); // remove the first message again so that is does not show up
 const currentOutputMessageContent = ref('');
 
 // const chatInput = ref('Why is the sky blue?')
 const chatInput = ref('')
 const chatInputBoxRef = useTemplateRef('chatInputBoxRef')
+
+const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'Enter' && event.shiftKey) {
+        console.log('Shift+Enter pressed!');
+        // Your Shift+Enter logic here (e.g., insert newline)
+        // If you don't want the default newline, use: event.preventDefault();
+    } else if (event.key === 'Enter') {
+        console.log('Enter pressed!');
+        event.preventDefault(); // Prevent default newline so submitChat can control it.
+        submitChat(); // Call your submitChat function
+    }
+};
 
 const submitChat = async () => {
     // console.log(imageFile.replace(new RegExp('data:.*/.*;base64,'), ''));
@@ -52,11 +60,7 @@ const submitChat = async () => {
     currentOutputMessageContent.value = '';
 };
 
-// const chooseCallback = () => {
-//     console.log('file upload');
-// }
 
-// const imageFile = ref();
 let imageFile: string = '';
 
 const uploadFile = (event: Event) => {
@@ -73,7 +77,7 @@ const uploadFile = (event: Event) => {
     // console.log("have file" + file.name)
 };
 
-const clearChat = (event: Event) => {
+const clearChat = () => {
     // messages.value.pop()
     messages.value = <Message[]>[]
 }
@@ -122,7 +126,7 @@ const focusInput = () => {
         </div> -->
         <div id="inputArea">
             <div id="inputTextArea">
-                <Textarea v-model="chatInput" @keyup.enter="submitChat" placeholder="Enter your prompt here ..."
+                <Textarea v-model="chatInput" @keydown="handleKeyDown" placeholder="Enter your prompt here ..."
                     id="chatInputBox" ref="chatInputBoxRef" style="box-shadow: none" />
             </div>
             <div id="inputButtonArea">
@@ -140,7 +144,7 @@ const focusInput = () => {
                 <div>
                     <label>
                         <button @click="clearChat" style="display: none;" />
-                        <i class="pi pi-times" title="Clear Chat" style="color: var(--custom-red)"></i>
+                        <i class="pi pi-trash" title="Clear Chat" style="color: var(--custom-red)"></i>
                     </label>
                 </div>
 

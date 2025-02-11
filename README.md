@@ -42,10 +42,11 @@ The resulting binary is a all-in-one bundle (i.e. webserver + website). All you 
   - e.g. a selector at the imput field
 
 - markdown support + highlighting
+  - https://dev.to/matijanovosel/rendering-markdown-in-vue-3-3maj
 - ability to easily copy/paste code
 
-- delete/clear chat
   - prune history (e.g only last x messages, automatically remove older ones? long history?)
+
 - save chat
 - indicator if message has an attachment
 - show indicator for attachment in input prompt (also need to be able to remove the image)
