@@ -67,7 +67,7 @@ const pullModel = (name: string) => {
         <div id="modelSelector" class="flex flex-column h-10rem">
             <!-- <span class="text-lg font-bold">Model</span> -->
             <div v-if="isPending">
-                <Dropdown placeholder="Loading Models..." loading class="w-full md:w-14rem"></Dropdown>
+                <Dropdown placeholder="Loading Models..." loading class="w-full md:w-14rem" />
             </div>
             <div v-else-if="isError">An error has occurred: {{ error }}</div>
             <div v-else-if="data" class="flex">
