@@ -123,7 +123,7 @@ const focusInput = () => {
         <div id="inputArea">
             <div id="inputTextArea">
                 <Textarea v-model="chatInput" @keyup.enter="submitChat" placeholder="Enter your prompt here ..."
-                    id="chatInputBox" ref="chatInputBoxRef" />
+                    id="chatInputBox" ref="chatInputBoxRef" style="box-shadow: none" />
             </div>
             <div id="inputButtonArea">
                 <!-- <Button @click="submitChat" icon="pi pi-send" rounded outlined severity="secondary"></Button> -->
