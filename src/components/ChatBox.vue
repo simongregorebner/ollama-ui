@@ -53,7 +53,8 @@ const submitChat = async () => {
 
     messages.value.push(inputMessage);
 
-    const response = await ollama.chat({ model: currentModel.value, messages: [inputMessage], stream: true });
+    // const response = await ollama.chat({ model: currentModel.value, messages: [inputMessage], stream: true });
+    const response = await ollama.chat({ model: currentModel.value, messages: messages.value, stream: true });
     for await (const part of response) {
         currentOutputMessageContent.value += part.message.content;
     }
