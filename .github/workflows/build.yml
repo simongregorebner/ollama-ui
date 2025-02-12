@@ -32,3 +32,4 @@ jobs:
         with:
           name: ${{ github.event.repository.name }}_${{ matrix.go_os }}
           path: ${{ github.event.repository.name }}_${{ matrix.go_os }}
+          compression-level: 0 # do not compress
