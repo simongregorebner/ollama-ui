@@ -3,6 +3,10 @@ name: Build and Release
 
 on: [push]
 # on:
+#   push:
+#     tags:
+#       - "v*.*.*"
+# on:
 #   release:
 #     types: [created] # Trigger on release creation
 
@@ -13,7 +17,8 @@ jobs:
     strategy:
       matrix:
         go_version: ['stable'] # Or your preferred Go version
-        go_os: [linux, darwin, windows] # Add other OSes as needed
+        # go_os: [linux, darwin, windows] # Add other OSes as needed
+        go_os: [darwin]
 
     steps:
       - uses: actions/checkout@v4
@@ -22,4 +27,8 @@ jobs:
           go-version: ${{ matrix.go_version }}
       - run: npm install
       - run: go generate
-      - run: GOOS=${{ matrix.go_os }} go build -o ${{ github.event.repository.name }}-${{ matrix.go_os }}
+      - run: GOOS=${{ matrix.go_os }} go build -o ${{ github.event.repository.name }}_${{ matrix.go_os }}
+      - uses: actions/upload-artifact@v4
+        with:
+          # name: ${{ github.event.repository.name }}_${{ matrix.go_os }}
+          path: ${{ github.event.repository.name }}_${{ matrix.go_os }}
