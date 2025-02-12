@@ -44,9 +44,10 @@ jobs:
       #         --repo="$GITHUB_REPOSITORY" \
       #         --title="${GITHUB_REPOSITORY#*/} ${tag#v}" \
       #         --generate-notes
-      - name: Upload binary as release asset
-        if: github.event_name == 'release' && github.event.action == 'created'
-        run: |
-          gh release upload ${{ github.event.release.id }} ${{ github.event.repository.name }}_${{ matrix.go_os }} --clobber
+      - uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ github.event.repository.name }}_${{ matrix.go_os }}
+          asset_name: ${{ github.event.repository.name }}_${{ matrix.go_os }}
