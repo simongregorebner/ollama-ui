@@ -62,10 +62,13 @@ jobs:
       #     asset_path: ${{ github.event.repository.name }}_darwin
       #     asset_name: ${{ github.event.repository.name }}_darwin
       #     asset_content_type: application/octet-stream
-      # - uses: softprops/action-gh-release@v2
-      #   with:
-      #     files: |
-      #       ${{ github.event.repository.name }}_darwin
-      #       ${{ github.event.repository.name }}_linux
-      #       ${{ github.event.repository.name }}_windows
-      - run: gh release upload ${GITHUB_REF_NAME} ${{ github.event.repository.name }}_* --clobber
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ${{ github.event.repository.name }}_darwin
+            ${{ github.event.repository.name }}_linux
+            ${{ github.event.repository.name }}_windows
+
+      # use this to avoid using the softprops action
+      # https://github.com/ollama/ollama/blob/82658c3eec0cbb70ba558e5310fe3e68436aa583/.github/workflows/release.yaml#L455
+      # - run: gh release upload ${GITHUB_REF_NAME} ${{ github.event.repository.name }}_* --clobber
