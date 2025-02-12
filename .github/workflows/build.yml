@@ -30,5 +30,5 @@ jobs:
       - run: GOOS=${{ matrix.go_os }} go build -o ${{ github.event.repository.name }}_${{ matrix.go_os }}
       - uses: actions/upload-artifact@v4
         with:
-          # name: ${{ github.event.repository.name }}_${{ matrix.go_os }}
+          name: ${{ github.event.repository.name }}_${{ matrix.go_os }}
           path: ${{ github.event.repository.name }}_${{ matrix.go_os }}
