@@ -8,9 +8,10 @@ Simply build/download the binary and start chatting ...
 1. Start ollama
 2. Start ollama-ui binary
 
-If you are on MacOS and you downloaded the binary from Github you might need to first release the binary from Gatekeeper quarantine like this:
+If you are on MacOS and you downloaded the binary from Github you might need to first make the binary executable and release the binary from Gatekeeper quarantine like this:
 
 ```bash
+chmod +x ollama-ui_darwin
 xattr -d com.apple.quarantine ollama-ui_darwin
 ```
 
