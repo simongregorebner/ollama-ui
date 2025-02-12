@@ -17,20 +17,21 @@ jobs:
     permissions:
       contents: write # Needed to create releases and upload assets
 
-    strategy:
-      matrix:
-        go_version: ['stable'] # Or your preferred Go version
-        # go_os: [linux, darwin, windows] # Add other OSes as needed
-        go_os: [darwin]
+    # strategy:
+    #   matrix:
+    #     go_version: ['stable'] # Or your preferred Go version
+    #     go_os: [linux, darwin, windows] # Add other OSes as needed
 
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
-          go-version: ${{ matrix.go_version }}
+          go-version: 'stable'
       - run: npm install
       - run: go generate
-      - run: GOOS=${{ matrix.go_os }} go build -o ${{ github.event.repository.name }}_${{ matrix.go_os }}
+      - run: GOOS=darwin go build -o ${{ github.event.repository.name }}_darwin
+      - run: GOOS=linux go build -o ${{ github.event.repository.name }}_linux
+      - run: GOOS=windows go build -o ${{ github.event.repository.name }}_windows
       # - uses: actions/upload-artifact@v4
       #   with:
       #     name: ${{ github.event.repository.name }}_${{ matrix.go_os }}
@@ -44,20 +45,26 @@ jobs:
       #         --repo="$GITHUB_REPOSITORY" \
       #         --title="${GITHUB_REPOSITORY#*/} ${tag#v}" \
       #         --generate-notes
-      - uses: actions/create-release@v1
-        id: create_release
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
-      - uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ github.event.repository.name }}_${{ matrix.go_os }}
-          asset_name: ${{ github.event.repository.name }}_${{ matrix.go_os }}
-          asset_content_type: application/octet-stream
+      # - uses: actions/create-release@v1
+      #   id: create_release
+      #   env:
+      #     GITHUB_TOKEN: ${{ github.token }}
+      #   with:
+      #     tag_name: ${{ github.ref }}
+      #     release_name: Release ${{ github.ref }}
+      #     draft: false
+      #     prerelease: false
+      # - uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ github.token }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: ${{ github.event.repository.name }}_darwin
+      #     asset_name: ${{ github.event.repository.name }}_darwin
+      #     asset_content_type: application/octet-stream
+    - uses: softprops/action-gh-release@v2
+      with:
+        files: |
+          ${{ github.event.repository.name }}_darwin
+          ${{ github.event.repository.name }}_linux
+          ${{ github.event.repository.name }}_windows
