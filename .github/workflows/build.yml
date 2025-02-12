@@ -2,13 +2,13 @@ name: Build and Release
 # run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 
 # on: [push]
-# on:
-#   push:
-#     tags:
-#       - 'v*.*.*'
 on:
-  release:
-    types: [created] # Trigger on release creation
+  push:
+    tags:
+      - 'v*.*.*'
+# on:
+#   release:
+#     types: [created] # Trigger on release creation
 
 jobs:
   build-and-release:
@@ -44,6 +44,15 @@ jobs:
       #         --repo="$GITHUB_REPOSITORY" \
       #         --title="${GITHUB_REPOSITORY#*/} ${tag#v}" \
       #         --generate-notes
+      - uses: actions/create-release@v1
+        id: create_release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
       - uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
