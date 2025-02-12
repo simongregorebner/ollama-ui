@@ -1,18 +1,21 @@
 name: Build and Release
 # run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 
-on: [push]
+# on: [push]
 # on:
 #   push:
 #     tags:
-#       - "v*.*.*"
-# on:
-#   release:
-#     types: [created] # Trigger on release creation
+#       - 'v*.*.*'
+on:
+  release:
+    types: [created] # Trigger on release creation
 
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write # Needed to create releases and upload assets
 
     strategy:
       matrix:
@@ -28,8 +31,22 @@ jobs:
       - run: npm install
       - run: go generate
       - run: GOOS=${{ matrix.go_os }} go build -o ${{ github.event.repository.name }}_${{ matrix.go_os }}
-      - uses: actions/upload-artifact@v4
-        with:
-          name: ${{ github.event.repository.name }}_${{ matrix.go_os }}
-          path: ${{ github.event.repository.name }}_${{ matrix.go_os }}
-          compression-level: 0 # do not compress
+      # - uses: actions/upload-artifact@v4
+      #   with:
+      #     name: ${{ github.event.repository.name }}_${{ matrix.go_os }}
+      #     path: ${{ github.event.repository.name }}_${{ matrix.go_os }}
+      # - name: Create release
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     tag: ${{ github.ref_name }}
+      #   run: |
+      #     gh release create "$tag" \
+      #         --repo="$GITHUB_REPOSITORY" \
+      #         --title="${GITHUB_REPOSITORY#*/} ${tag#v}" \
+      #         --generate-notes
+      - name: Upload binary as release asset
+        if: github.event_name == 'release' && github.event.action == 'created'
+        run: |
+          gh release upload ${{ github.event.release.id }} ${{ github.event.repository.name }}_${{ matrix.go_os }} --clobber
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
