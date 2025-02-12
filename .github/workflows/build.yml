@@ -1,14 +1,25 @@
-name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+name: Build and Release
+# run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+
 on: [push]
+# on:
+#   release:
+#     types: [created] # Trigger on release creation
+
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        go_version: ['stable'] # Or your preferred Go version
+        go_os: [linux, darwin, windows] # Add other OSes as needed
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
-          go-version: 'stable'
+          go-version: ${{ matrix.go_version }}
       - run: npm install
       - run: go generate
-      - run: go build
+      - run: GOOS=${{ matrix.go_os }} go build -o ${{ github.event.repository.name }}-${{ matrix.go_os }}
